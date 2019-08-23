@@ -68,23 +68,27 @@ set background=dark
 
 " Functional groups
 Hi normal           250 234 NONE
+Hi normalf          NONE 234 NONE
 Hi lightemphasis    fg  bg  underline
-Hi underline         NONE NONE underline
+Hi underline        NONE NONE underline
 Hi emphasis         252 bg  bold
 Hi deemphasis       240 bg  NONE
 Hi lowvis           240 bg  NONE
 Hi extralowvis      237 bg  NONE
 Hi alert            203 bg  NONE
+Hi warning          180 bg  NONE
+Hi textalert        203 bg  underline
+Hi textwarning      180 bg  underline
 Hi highlightedtext  190 bg  NONE
 Hi highlightedline  fg  235 NONE
 Hi selection        252 241 NONE
 Hi activetext       bg  252 NONE
 Hi inactivetext     59  235 NONE
 Hi colorful         71  bg  NONE
-Hi activeui         71  235 NONE
-Hi inactiveui       59  235 NONE
+Hi activeui         71  237 NONE
+Hi inactiveui       102  237 NONE
 Hi altemphasis      76  bg  NONE
-Hi altnormal        28  bg  NONE
+Hi altnormal        173 bg  NONE
 Hi altdeemphasis    66  bg  NONE
 Hi altlowvis        65  bg  NONE
 Hi altcontrast      35  bg  bold
@@ -96,27 +100,48 @@ Hi pmenuthumb       fg  243 NONE
 Hi wildmenu         253 235 bold
 Hi folded           245  235 NONE
 
+" User
+Hi User1 203 237 NONE
+Hi User2  35 237 NONE
+Hi User3 190 237 NONE
+Hi User4  66 237 NONE
+Hi User5 240 237 NONE
+Hi User6  66 237 NONE
+Hi User7 253 237 NONE
+
 " :h highlight-groups
 
-Linkto normal           cursorlinenr diffchange modemsg moremsg question
-Linkto lowvis           conceal diffdelete endofbuffer ignore foldcolumn
+Linkto normal           cursorlinenr modemsg moremsg question
+Linkto colorful         cursorlinenr
+Linkto normalf          cursorline
+Linkto lowvis           conceal endofbuffer ignore foldcolumn
                         \ linenr nontext signcolumn
+Linkto altdeemphasis        directory
 Linkto altlowvis        String
-Linkto emphasis         directory title specialkey warningmsg
+Linkto emphasis         title warningmsg
 Linkto alert            errormsg
 Linkto lightemphasis    matchparen
-Linkto highlightedline  colorcolumn cursorcolumn cursorline
+Linkto highlightedline  colorcolumn cursorcolumn
 Linkto activetext       cursor cursorim incsearch pmenusel
-Linkto highlightedtext  diffadd difftext search
+Linkto highlightedtext  search
 Linkto activeui         StatusLine statuslineterm tablinesel
 Linkto inactiveui       statuslinenc statuslinetermnc tabline tablinefill
 Linkto extralowvis      vertsplit
 Linkto selection        visual visualnos
 
+Linkto textalert        spellbad
+Linkto textwarning      spellcap spellrare spelllocal
+
+Linkto altlowvis        diffadd
+Linkto alert            diffdelete
+Linkto altdeemphasis    diffchange
+" Linkto altnormal        difftext
+Linkto altnormal        difftext
+
 " syntax -- :h group-name
 
 " Ensure default linkage
-Linkto constant         character number boolean float
+Linkto constant         character boolean float number
 Linkto identifier       function
 Linkto statement        conditional repeat label exception
 Linkto preproc          include define macro precondit
@@ -124,15 +149,18 @@ Linkto type             storageclass structure typedef
 Linkto special          specialchar tag delimiter specialcomment debug
 
 " Code: monochrome highlighting
-Linkto normal           constant identifier preproc type special
+" Linkto altnormal        special
+Linkto normal           identifier preproc type
 Linkto alert            error
 Linkto lightemphasis    todo
-Linkto deemphasis       comment preproc
-Linkto altdeemphasis    type
+Linkto deemphasis       comment preproc specialkey
+Linkto altdeemphasis    vimcommenttitle
+Linkto altdeemphasis    type special constant
 Linkto normal           statement
 
-" Linkto emphasis         htmltag htmlendtag htmltagname htmlspecialtagname
-Linkto contrast         htmlarg
+Linkto altdeemphasis    htmltagname htmlspecialtagname
+Linkto normal           htmltag htmlendtag
+Linkto normal           htmlarg
 Linkto altlowvis        htmlstring htmlvalue
 Linkto emphasis         operator keyword
 Linkto lowvis           htmcomment htmlcommentpart
@@ -145,6 +173,9 @@ Linkto emphasis      difffile
 Linkto deemphasis    diffconstant diffindexline diffsubname diffline
 Linkto emphasis         helphypertextjump helpcommand helpoption
 Linkto deemphasis       helphypertextentry helpexample
+
+Linkto lightemphasis    cssIdentifier
+" Linkto altdeemphasis    jsFunction
 
 Linkto underline    MatchWordCur MatchWord
 
