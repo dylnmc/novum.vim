@@ -5,8 +5,8 @@ let colors_name = 'novum'
 let s:editingthisfile = expand('%:p') == expand('<sfile>:p')
 
 if s:editingthisfile
-	nnoremap <buffer> ( <c-x>:try <bar> execute getline('.') <bar> catch <bar> undo <bar> endtry<cr>
-	nnoremap <buffer> ) <c-a>:try <bar> execute getline('.') <bar> catch <bar> undo <bar> endtry<cr>
+	nnoremap <buffer> ( <c-x>:try<bar>execute getline('.')<bar>catch<bar>undo<bar>endtry<cr>
+	nnoremap <buffer> ) <c-a>:try<bar>execute getline('.')<bar>catch<bar>undo<bar>endtry<cr>
 endif
 
 " 256 xterm color palette
@@ -48,7 +48,7 @@ let s:rgb = [
 function! s:highlight(grp, fg, bg, attr)
     let rgb_fg = a:fg =~# '^\d\+$' ? s:rgb[a:fg] : a:fg
     let rgb_bg = a:bg =~# '^\d\+$' ? s:rgb[a:bg] : a:bg
-    exec 'hi! '.a:grp.' ctermfg='.a:fg.' ctermbg='.a:bg.' cterm='.a:attr
+    exec 'hi! '.a:grp.' ctermfg='.(a:fg ==# 'fg' ? 'NONE' : a:fg).' ctermbg='.(a:bg ==# 'bg' ? 'NONE' : a:bg).' cterm='.a:attr
     exec 'hi! ' . a:grp . ' guifg=' . rgb_fg . ' guibg=' . rgb_bg . ' gui=' . a:attr
 endfunction
 
@@ -56,131 +56,174 @@ command! -buffer -bar -nargs=+ Hi call s:highlight(<f-args>)
 
 " Link many groups in one go.
 
-function! s:linkto(to,...)
-    for from in a:000
-        execute 'highlight! link ' . from . ' ' . a:to
-    endfor
-endfunction
-
 command! -buffer -nargs=+ Linkto call s:linkto(<f-args>)
 
 set background=dark
 
-" Functional groups
-Hi normal           250 234 NONE
-Hi normalf          NONE 234 NONE
-Hi lightemphasis    fg  bg  underline
-Hi underline        NONE NONE underline
-Hi emphasis         252 bg  bold
-Hi deemphasis       240 bg  NONE
-Hi lowvis           240 bg  NONE
-Hi extralowvis      237 bg  NONE
-Hi alert            203 bg  NONE
-Hi warning          180 bg  NONE
-Hi textalert        203 bg  underline
-Hi textwarning      180 bg  underline
-Hi highlightedtext  190 bg  NONE
-Hi highlightedline  fg  235 NONE
-Hi selection        252 241 NONE
-Hi activetext       bg  252 NONE
-Hi inactivetext     59  235 NONE
-Hi colorful         71  bg  NONE
-Hi activeui         71  237 NONE
-Hi inactiveui       102  237 NONE
-Hi altemphasis      76  bg  NONE
-Hi altnormal        173 bg  NONE
-Hi altdeemphasis    66  bg  NONE
-Hi altlowvis        65  bg  NONE
-Hi altcontrast      35  bg  bold
 
-" Some special cases.
-Hi pmenu            252 237 NONE
-Hi pmenusbar        fg  238 NONE
-Hi pmenuthumb       fg  243 NONE
-Hi wildmenu         253 235 bold
-Hi folded           245  235 NONE
+" Default: |highlight-groups|
+" ~~~~~~~
 
-" User
-Hi User1 203 237 NONE
-Hi User2  35 237 NONE
-Hi User3 190 237 NONE
-Hi User4  66 237 NONE
-Hi User5 240 237 NONE
-Hi User6  66 237 NONE
-Hi User7 253 237 NONE
+"  Group               FG   BG   STYLE
+"  ------------------- ---- ---- ---------------------------------------
+Hi ColorColumn         fg   235  NONE
+Hi Conceal             240  bg   NONE
+Hi Cursor              234  252  NONE
+Hi lCursor             234  252  NONE
+Hi CursorIM            234  252  NONE
+Hi CursorColumn        fg   235  NONE
+Hi CursorLine          NONE 234  NONE
+Hi Directory           240  bg   NONE
+Hi DiffAdd             65   bg   NONE
+Hi DiffChange          250  234  bold
+Hi DiffDelete          203  bg   NONE
+Hi DiffText            173  bg   NONE
+Hi EndOfBuffer         240  bg   NONE
+Hi ErrorMsg            203  bg   NONE
+Hi VertSplit           237  bg   NONE
+Hi Folded              245  235  NONE
+Hi FoldColumn          240  bg   NONE
+Hi SignColumn          240  bg   NONE
+Hi IncSearch           234  252  NONE
+Hi LineNr              240  bg   NONE
+Hi CursorLineNr        71   bg   NONE
+Hi MatchParen          fg   bg   underline
+Hi ModeMsg             250  234  NONE
+Hi MoreMsg             250  234  NONE
+Hi NonText             240  bg   NONE
+Hi Normal              250  234  NONE
+Hi Pmenu               252  237  NONE
+Hi PmenuSel            234  252  NONE
+Hi PmenuSbar           fg   238  NONE
+Hi PmenuThumb          fg   243  NONE
+Hi Question            250  234  NONE
+Hi QuickFixLine        fg   bg   underline
+Hi Search              190  bg   NONE
+Hi SpecialKey          241  bg   NONE
+Hi SpellBad            203  bg   underline
+Hi SpellCap            180  bg   underline
+Hi SpellLocal          180  bg   underline
+Hi SpellRare           180  bg   underline
+Hi StatusLine          71   237  NONE
+Hi StatusLineNC        243  237  NONE
+Hi StatusLineTerm      71   237  NONE
+Hi StatusLineTermNC    243  237  NONE
+Hi TabLine             243  237  NONE
+Hi TabLineFill         243  237  NONE
+Hi TabLineSel          71   237  NONE
+Hi Terminal            250  234  NONE
+Hi Title               252  NONE bold
+Hi Visual              252  241  NONE
+Hi VisualNOS           252  241  NONE
+Hi WarningMsg          252  NONE bold
+Hi WildMenu            253  235  bold
 
-" :h highlight-groups
+" Syntax: |group-name|
+" ~~~~~~
 
-Linkto normal           cursorlinenr modemsg moremsg question
-Linkto colorful         cursorlinenr
-Linkto normalf          cursorline
-Linkto lowvis           conceal endofbuffer ignore foldcolumn
-                        \ linenr nontext signcolumn
-Linkto altdeemphasis        directory
-Linkto altlowvis        String
-Linkto emphasis         title warningmsg
-Linkto alert            errormsg
-Linkto lightemphasis    matchparen
-Linkto highlightedline  colorcolumn cursorcolumn
-Linkto activetext       cursor cursorim incsearch pmenusel
-Linkto highlightedtext  search
-Linkto activeui         StatusLine statuslineterm tablinesel
-Linkto inactiveui       statuslinenc statuslinetermnc tabline tablinefill
-Linkto extralowvis      vertsplit
-Linkto selection        visual visualnos
+"  Group               FG   BG   STYLE
+"  ------------------- ---- ---- ---------------------------------------
+Hi Comment             241  bg   NONE
+Hi Constant            66   bg   NONE
+Hi String              65   bg   NONE
+Hi Character           66   bg   NONE
+Hi Number              66   bg   NONE
+Hi Boolean             66   bg   NONE
+Hi Float               66   bg   NONE
+Hi Identifier          250  234  NONE
+Hi Function            250  234  NONE
+Hi Statement           250  234  NONE
+Hi Conditional         250  234  NONE
+Hi Repeat              250  234  NONE
+Hi Label               250  234  NONE
+Hi Operator            252  NONE bold
+Hi Keyword             252  NONE bold
+Hi Exception           250  234  NONE
+Hi PreProc             66   bg   NONE
+Hi Include             66   bg   NONE
+Hi Define              66   bg   NONE
+Hi Macro               66   bg   NONE
+Hi PreCondit           66   bg   NONE
+Hi Type                66   bg   NONE
+Hi StorageClass        66   bg   NONE
+Hi Structure           66   bg   NONE
+Hi Typedef             66   bg   NONE
+Hi Special             66   bg   NONE
+Hi SpecialChar         66   bg   NONE
+Hi Tag                 66   bg   NONE
+Hi Delimiter           66   bg   NONE
+Hi SpecialComment      66   bg   NONE
+Hi Debug               66   bg   NONE
+Hi Underlined          NONE NONE underline
+Hi Ignore              240  bg   NONE
+Hi Error               203  bg   NONE
+Hi Todo                fg   bg   underline
 
-Linkto textalert        spellbad
-Linkto textwarning      spellcap spellrare spelllocal
+" User: |hl-User1..9|
+" ~~~~
 
-Linkto altlowvis        diffadd
-Linkto alert            diffdelete
-Linkto altdeemphasis    diffchange
-" Linkto altnormal        difftext
-Linkto altnormal        difftext
+"  Group               FG   BG   STYLE
+"  ------------------- ---- ---- ---------------------------------------
+Hi User1               203  237  NONE
+Hi User2               35   237  NONE
+Hi User3               190  237  NONE
+Hi User4               66   237  NONE
+Hi User5               240  237  NONE
+Hi User6               66   237  NONE
+Hi User7               253  237  NONE
 
-" syntax -- :h group-name
+" Extra:
+" ~~~~~
 
-" Ensure default linkage
-Linkto constant         character boolean float number
-Linkto identifier       function
-Linkto statement        conditional repeat label exception
-Linkto preproc          include define macro precondit
-Linkto type             storageclass structure typedef
-Linkto special          specialchar tag delimiter specialcomment debug
+"  Group               FG   BG   STYLE
+"  ------------------- ---- ---- ---------------------------------------
+Hi vimCommentTitle     66   bg   NONE
 
-" Code: monochrome highlighting
-" Linkto altnormal        special
-Linkto normal           identifier preproc type
-Linkto alert            error
-Linkto lightemphasis    todo
-Linkto deemphasis       comment preproc specialkey
-Linkto altdeemphasis    vimcommenttitle
-Linkto altdeemphasis    type special constant
-Linkto normal           statement
+Hi htmltagname         66   bg   NONE
+Hi htmlspecialtagname  66   bg   NONE
+Hi htmltag             250  234  NONE
+Hi htmlendtag          250  234  NONE
+Hi htmlarg             250  234  NONE
+Hi htmlstring          65   bg   NONE
+Hi htmlvalue           65   bg   NONE
+Hi htmcomment          240  bg   NONE
+Hi htmlcommentpart     240  bg   NONE
 
-Linkto altdeemphasis    htmltagname htmlspecialtagname
-Linkto normal           htmltag htmlendtag
-Linkto normal           htmlarg
-Linkto altlowvis        htmlstring htmlvalue
-Linkto emphasis         operator keyword
-Linkto lowvis           htmcomment htmlcommentpart
-Linkto diffconstant     diffonly diffidentical diffdiffer diffbdiffer diffisa
-                        \ diffnoeol diffcommon
-Linkto lowvis           diffcomment
-Linkto deemphasis       diffremoved
-Linkto emphasis         diffchanged diffadded difffile
-Linkto emphasis      difffile
-Linkto deemphasis    diffconstant diffindexline diffsubname diffline
-Linkto emphasis         helphypertextjump helpcommand helpoption
-Linkto deemphasis       helphypertextentry helpexample
+Hi cssProp             246  NONE NONE
+Hi cssDefinition       246  NONE NONE
+Hi cssBackgroundProp   246  NONE NONE
+Hi cssMediaProp        246  NONE NONE
+Hi cssPositioningProp  246  NONE NONE
+Hi cssSelectorOp       246  NONE NONE
 
-Linkto lightemphasis    cssIdentifier
-" Linkto altdeemphasis    jsFunction
+Hi DiffOnly            241  bg   NONE
+Hi DiffIdentical       241  bg   NONE
+Hi DiffDiffer          241  bg   NONE
+Hi DiffBdiffer         241  bg   NONE
+Hi DiffIsa             241  bg   NONE
+Hi DiffNoeol           241  bg   NONE
+Hi DiffCommon          241  bg   NONE
+Hi DiffComment         240  bg   NONE
+Hi DiffRemoved         203  bg   NONE
+Hi DiffChanged         252  NONE bold
+Hi DiffAdded           252  NONE bold
+Hi DiffFile            252  NONE bold
+Hi DiffConstant        241  bg   NONE
+Hi DiffIndexLine       241  bg   NONE
+Hi DiffSubname         241  bg   NONE
+Hi DiffLine            241  bg   NONE
 
-Linkto underline    MatchWordCur MatchWord
+Hi HelpHypertextJump   252  NONE bold
+Hi HelpCommand         252  NONE bold
+Hi HelpOption          252  NONE bold
+Hi HelpHyperTextEntry  241  bg   NONE
+Hi HelpExample         241  bg   NONE
+
+Hi MatchWordCur        NONE NONE underline
+Hi MatchWord           NONE NONE underline
 
 if !s:editingthisfile
-    delcom Linkto
-    delcom Hi
+	delcom Hi
 endif
 
+" vim: isk+=-,.:
