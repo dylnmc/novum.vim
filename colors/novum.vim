@@ -21,7 +21,7 @@ let s:colors.lightbg = 235
 " selection
 let s:colors.select = 241
 
-" dark background
+" dark foreground
 let s:colors.darkfg = 102
 
 " UI foreground
@@ -98,7 +98,7 @@ Hi VertSplit           comment      comment      NONE
 Hi Folded              243          lightbg      NONE
 Hi FoldColumn          comment      NONE         NONE
 Hi SignColumn          comment      NONE         NONE
-Hi IncSearch           bg           brightyellow NONE
+Hi IncSearch           brightyellow bg           reverse
 Hi LineNr              comment      NONE         NONE
 Hi CursorLineNr        brightgreen  NONE         NONE
 Hi MatchParen          NONE         NONE         underline
@@ -138,41 +138,41 @@ Hi WildMenu            NONE         lightbg      bold
 
 "  Group               FG           BG           STYLE
 "  ------------------- ------------ ------------ -------------------------------
-Hi Comment             comment  NONE   NONE
-Hi Constant            blue   NONE   NONE
-Hi String              green NONE   NONE
-Hi Character           green  NONE   NONE
-Hi Number              blue   NONE   NONE
-Hi Boolean             blue   NONE   NONE
-Hi Float               blue   NONE   NONE
-Hi Identifier          NONE   NONE   NONE
-Hi Function            blue   NONE   NONE
-Hi Statement           darkfg  NONE   NONE
-Hi Conditional         darkfg  NONE   NONE
-Hi Repeat              darkfg  NONE   NONE
-Hi Label               NONE  NONE  NONE
-Hi Operator            NONE  NONE bold
-Hi Keyword             NONE  NONE bold
-Hi Exception           NONE  NONE  NONE
-Hi PreProc             blue   NONE   NONE
-Hi Include             blue   NONE   NONE
-Hi Define              blue   NONE   NONE
-Hi Macro               blue   NONE   NONE
-Hi PreCondit           blue   NONE   NONE
-Hi Type                blue   NONE   NONE
-Hi StorageClass        blue   NONE   NONE
-Hi Structure           blue   NONE   NONE
-Hi Typedef             blue   NONE   NONE
-Hi Special             blue   NONE   NONE
-Hi SpecialChar         blue   NONE   NONE
-Hi Tag                 blue   NONE   NONE
-Hi Delimiter           NONE   NONE   NONE
-Hi SpecialComment      blue   NONE   NONE
-Hi Debug               blue   NONE   NONE
-Hi Underlined          NONE NONE underline
-Hi Ignore              comment  NONE   NONE
-Hi Error               red  NONE   NONE
-Hi Todo                fg   NONE   underline
+Hi Comment             comment      NONE         NONE
+Hi Constant            blue         NONE         NONE
+Hi String              green        NONE         NONE
+Hi Character           green        NONE         NONE
+Hi Number              blue         NONE         NONE
+Hi Boolean             blue         NONE         NONE
+Hi Float               blue         NONE         NONE
+Hi Identifier          NONE         NONE         NONE
+Hi Function            blue         NONE         NONE
+Hi Statement           darkfg       NONE         NONE
+Hi Conditional         darkfg       NONE         NONE
+Hi Repeat              darkfg       NONE         NONE
+Hi Label               NONE         NONE         NONE
+Hi Operator            NONE         NONE         bold
+Hi Keyword             NONE         NONE         bold
+Hi Exception           NONE         NONE         NONE
+Hi PreProc             blue         NONE         NONE
+Hi Include             blue         NONE         NONE
+Hi Define              blue         NONE         NONE
+Hi Macro               blue         NONE         NONE
+Hi PreCondit           blue         NONE         NONE
+Hi Type                blue         NONE         NONE
+Hi StorageClass        blue         NONE         NONE
+Hi Structure           blue         NONE         NONE
+Hi Typedef             blue         NONE         NONE
+Hi Special             blue         NONE         NONE
+Hi SpecialChar         blue         NONE         NONE
+Hi Tag                 blue         NONE         NONE
+Hi Delimiter           NONE         NONE         NONE
+Hi SpecialComment      blue         NONE         NONE
+Hi Debug               blue         NONE         NONE
+Hi Underlined          NONE         NONE         underline
+Hi Ignore              comment      NONE         NONE
+Hi Error               red          NONE         NONE
+Hi Todo                fg           NONE         underline
 
 " :)
 " User: |hl-User1..9| (:
@@ -180,15 +180,15 @@ Hi Todo                fg   NONE   underline
 
 "  Group               FG           BG           STYLE
 "  ------------------- ------------ ------------ -------------------------------
-Hi User1               red  uibg  NONE
-Hi User2               brightgreen   uibg  NONE
-Hi User3               yellow  uibg  NONE
-Hi User4               blue   uibg  NONE
-Hi User5               comment  uibg  NONE
-Hi User6               blue   uibg  NONE
-Hi User7               fg   uibg  NONE
-Hi User8               uifgnc  uibg  NONE
-Hi User9               247  uibg NONE
+Hi User1               red          uibg         NONE
+Hi User2               brightgreen  uibg         NONE
+Hi User3               yellow       uibg         NONE
+Hi User4               blue         uibg         NONE
+Hi User5               comment      uibg         NONE
+Hi User6               blue         uibg         NONE
+Hi User7               fg           uibg         NONE
+Hi User8               uifgnc       uibg         NONE
+Hi User9               247          uibg         NONE
 
 " :)
 " Extra: (:
@@ -196,55 +196,55 @@ Hi User9               247  uibg NONE
 
 "  Group               FG           BG           STYLE
 "  ------------------- ------------ ------------ -------------------------------
-Hi htmltagname         blue   NONE NONE
-Hi htmlspecialtagname  blue   NONE NONE
-Hi htmltag             NONE  NONE NONE
-Hi htmlendtag          NONE  NONE NONE
-Hi htmlarg             NONE  NONE NONE
-Hi htmlstring          green   NONE NONE
-Hi htmlvalue           green   NONE NONE
-Hi htmcomment          comment NONE NONE
-Hi htmlcommentpart     comment NONE NONE
-
-Hi cssProp             darkfg NONE NONE
-Hi cssDefinition       darkfg NONE NONE
-Hi cssBackgroundProp   darkfg NONE NONE
-Hi cssMediaProp        darkfg NONE NONE
-Hi cssPositioningProp  darkfg NONE NONE
-Hi cssSelectorOp       darkfg NONE NONE
-
-Hi DiffOnly            comment NONE NONE
-Hi DiffIdentical       comment NONE NONE
-Hi DiffDiffer          comment NONE NONE
-Hi DiffBdiffer         comment NONE NONE
-Hi DiffIsa             comment NONE NONE
-Hi DiffNoeol           comment NONE NONE
-Hi DiffCommon          comment NONE NONE
-Hi DiffComment         comment NONE NONE
-Hi DiffRemoved         red  NONE NONE
-Hi DiffChanged         NONE  NONE bold
-Hi DiffAdded           NONE  NONE bold
-Hi DiffFile            NONE  NONE bold
-Hi DiffConstant        comment NONE NONE
-Hi DiffIndexLine       comment NONE NONE
-Hi DiffSubname         comment NONE NONE
-Hi DiffLine            comment NONE NONE
-
-Hi HelpHypertextJump   NONE  NONE bold
-Hi HelpCommand         NONE  NONE bold
-Hi HelpOption          NONE  NONE bold
-Hi HelpHyperTextEntry  darkfg  NONE NONE
-Hi HelpExample         darkfg  NONE NONE
-
-Hi vimHiGroup green NONE NONE
-Hi vimHiGuiFgBg blue NONE NONE
-Hi vimHiCtermFgBg blue NONE NONE
-Hi vimFunction blue NONE NONE
-Hi vimFuncVar darkfg NONE NONE
-Hi vimCommentTitle fg NONE bold
-
-Hi MatchWordCur        NONE NONE underline
-Hi MatchWord           NONE NONE underline
+Hi htmltagname         blue         NONE         NONE
+Hi htmlspecialtagname  blue         NONE         NONE
+Hi htmltag             NONE         NONE         NONE
+Hi htmlendtag          NONE         NONE         NONE
+Hi htmlarg             NONE         NONE         NONE
+Hi htmlstring          green        NONE         NONE
+Hi htmlvalue           green        NONE         NONE
+Hi htmcomment          comment      NONE         NONE
+Hi htmlcommentpart     comment      NONE         NONE
+"  ------------------- ------------ ------------ -------------------------------
+Hi cssProp             darkfg       NONE         NONE
+Hi cssDefinition       darkfg       NONE         NONE
+Hi cssBackgroundProp   darkfg       NONE         NONE
+Hi cssMediaProp        darkfg       NONE         NONE
+Hi cssPositioningProp  darkfg       NONE         NONE
+Hi cssSelectorOp       darkfg       NONE         NONE
+"  ------------------- ------------ ------------ -------------------------------
+Hi DiffOnly            comment      NONE         NONE
+Hi DiffIdentical       comment      NONE         NONE
+Hi DiffDiffer          comment      NONE         NONE
+Hi DiffBdiffer         comment      NONE         NONE
+Hi DiffIsa             comment      NONE         NONE
+Hi DiffNoeol           comment      NONE         NONE
+Hi DiffCommon          comment      NONE         NONE
+Hi DiffComment         comment      NONE         NONE
+Hi DiffRemoved         red          NONE         NONE
+Hi DiffChanged         NONE         NONE         bold
+Hi DiffAdded           NONE         NONE         bold
+Hi DiffFile            NONE         NONE         bold
+Hi DiffConstant        comment      NONE         NONE
+Hi DiffIndexLine       comment      NONE         NONE
+Hi DiffSubname         comment      NONE         NONE
+Hi DiffLine            comment      NONE         NONE
+"  ------------------- ------------ ------------ -------------------------------
+Hi HelpHypertextJump   NONE         NONE         bold
+Hi HelpCommand         NONE         NONE         bold
+Hi HelpOption          NONE         NONE         bold
+Hi HelpHyperTextEntry  darkfg       NONE         NONE
+Hi HelpExample         darkfg       NONE         NONE
+"  ------------------- ------------ ------------ -------------------------------
+Hi vimHiGroup          green        NONE         NONE
+Hi vimHiGuiFgBg        blue         NONE         NONE
+Hi vimHiCtermFgBg      blue         NONE         NONE
+Hi vimFunction         blue         NONE         NONE
+Hi vimFuncVar          darkfg       NONE         NONE
+Hi vimCommentTitle     fg           NONE         bold
+"  ------------------- ------------ ------------ -------------------------------
+Hi MatchWordCur        NONE         NONE         underline
+Hi MatchWord           NONE         NONE         underline
 
 " :)
 
