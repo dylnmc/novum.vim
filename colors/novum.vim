@@ -5,83 +5,117 @@ highlight clear
 let colors_name = 'novum'
 set background=dark
 
+command! -bang -bar -nargs=? -complete=customlist,novum#color_set_compl Novum call novum#color_set(<bang>0, <f-args>)
+command! -bar -complete=highlight -nargs=+ H call s:hi(<f-args>)
+
 " colors (:
 
-let s:colors = {}
+let s:t_string = get(v:, 't_string', type(''))
+
+let g:novum#defaults = {}
+let g:novum#maxes = {}
+let g:novum#colors = {}
+
+" "set color default, max, color" (:
+"
+" PARAM: t_string "name" : name used for the defaults, maxes, colors dicts
+" PARAM: t_number "def"  : default value for lst; also, stored in defaults dict
+" PARAM: t_list   "lst"  : list of colors to choose from
+"
+function! s:setColor(name, def, lst)
+	let g:novum#defaults[a:name] = a:def
+	let g:novum#maxes[a:name] = len(a:lst)
+	let g:novum#colors[a:name] = max([0, min([255, a:lst[ max([0, min([len(a:lst) - 1, str2nr(get(g:, 'novum_'.a:name, a:def))])]) ]])])
+endfunction " :)
+
+" "link previous color with increment"
+function! s:linkColor(name, link, inc, ...)
+	let g:novum#defaults[a:name] = 0
+	let g:novum#maxes[a:name] = 1
+	let g:novum#colors[a:name] = max([0, get(a:000, 0, 0), min([255, get(a:000, 1, 255), g:novum#colors[a:link] + a:inc])])
+endfunction
 
 " normal foreground
-let s:colors.fg = [248, 250, 252, 254][get(g:, 'novum_fg', 1)]
+call s:setColor('fg', 2, range(248, 254, 2))
 
 " normal background
-let s:colors.bg = [232, 233, 234, 235][get(g:, 'novum_bg', 1)]
+call s:setColor('bg', 2, range(232, 235))
 
 " light background
-let s:colors.lightbg = s:colors.bg + 2
+call s:linkColor('lightbg', 'bg', 2)
+
+" light foreground
+call s:linkColor('lightfg', 'lightbg', 10)
+
+" brighter background
+call s:linkColor('brightbg', 'bg', 3)
+
+" brighter foreground
+call s:linkColor('brightfg', 'brightbg', 10)
 
 " selection
-let s:colors.select = s:colors.bg + 8
+call s:linkColor('select', 'bg', 8)
 
 " selection fg
-let s:colors.selectfg = s:colors.fg + 1
+let g:novum#colors.selectfg = 255
 
 " darker foreground
-let s:colors.darkfg = s:colors.fg - 8
+call s:linkColor('darkfg', 'fg', -6)
 
 " UI foreground
-let s:colors.uifg = min([255, s:colors.fg + 3])
+call s:linkColor('uifg', 'fg', 3)
 
 " UI background
-let s:colors.uibg = 237
+call s:linkColor('uibg', 'bg', 3)
 
 " UI foreground NC
-let s:colors.uifgnc = 243
+call s:setColor('uifgnc', 0, [243])
 
 " UI background NC
-let s:colors.uibgnc = s:colors.uibg - 1
+call s:linkColor('uibgnc', 'uibg', -1)
+let g:novum#colors.uibgnc = 236
 
 " comment
-let s:colors.comment = s:colors.fg - (12 - get(g:, 'novum_comment', 0))
+call s:setColor('comment', 2, range(g:novum#colors.bg + 3, g:novum#colors.darkfg - 2))
 
 " blue
-let s:colors.blue = [66, 30, 37][get(g:, 'novum_blue', 1)]
+call s:setColor('blue', 2, [23, 30, 31, 37, 38, 45, 51])
+call s:setColor('lightblue', 0, [109])
 
 " green
-let s:colors.green = [65, 29, 35][get(g:, 'novum_green', 1)]
-let s:colors.brightgreen = 77
+call s:setColor('green', 1, [29, 35, 78, 85])
+call s:setColor('brightgreen', { n -> n ==# -1 ? 1 : n }(index([29, 35, 78, 85], g:novum#colors.green)), [35, 78, 85, 48])
 
 " red
-let s:colors.red = 203
+call s:setColor('red', 0, [203])
 
 " orange
-let s:colors.orange = 130
-let s:colors.brightorange = 214
+call s:setColor('orange', 0, [130])
+call s:setColor('brightorange', 0, [214])
 
 " yellow
-let s:colors.yellow = 136
-let s:colors.brightyellow = [190, 226][get(g:, 'novum_brightyellow', 0)]
+call s:setColor('yellow', 0, [136])
+call s:setColor('brightyellow', 1, [226, 190])
 
 " purple
-let s:colors.purple = 105
-
-" expose g:novum_colors
-let g:novum_colors = s:colors
+call s:setColor('purple', 0, [102])
 
 " :)
 
-" ":Novum fg 1" for example
-command! -bang -bar -nargs=+ -complete=customlist,novum#color_set_compl Novum call novum#color_set(<bang>0, <f-args>)
-command! -bar -complete=highlight -nargs=+ H call s:hi(<f-args>)
-
 function! s:hi(grp, fg, bg, attr) " (:
-	let l:fg = a:fg =~? '^\%(\d\+\|none\)$' ? a:fg : s:colors[a:fg]
-	let l:bg = a:bg =~? '^\%(\d\+\|none\)$' ? a:bg : s:colors[a:bg]
+	let l:fg = a:fg =~? '^\%(\d\+\|none\)$' ? a:fg : g:novum#colors[a:fg]
+	let l:bg = a:bg =~? '^\%(\d\+\|none\)$' ? a:bg : g:novum#colors[a:bg]
 	exec printf('hi! %s ctermfg=%s ctermbg=%s cterm=%s', a:grp, l:fg, l:bg, a:attr)
-	exec printf('hi! %s guifg=%s guibg=%s gui=%s', a:grp, l:fg =~# '^\d\+$' ? s:rgb[l:fg] : l:fg, l:bg =~# '^\d\+$' ? s:rgb[l:bg] : l:bg, a:attr)
+	exec printf('hi! %s guifg=%s guibg=%s gui=%s', a:grp, l:fg =~# '^\d\+$' ? g:novum#xterm_colors[l:fg] : l:fg, l:bg =~# '^\d\+$' ? g:novum#xterm_colors[l:bg] : l:bg, a:attr)
 endfunction " :)
 
 " 256 xterm color palette (:
 
-let s:rgb = [ '#000000', '#c00000', '#008000', '#808000', '#000080', '#800080', '#008080', '#c0c0c0', '#808080', '#ff0000', '#00ff00', '#ffff00', '#0000ff', '#ff00ff', '#00ffff', '#ffffff', '#000000', '#00005f', '#000087', '#0000af', '#0000d7', '#0000ff', '#005f00', '#005f5f', '#005f87', '#005faf', '#005fd7', '#005fff', '#008700', '#00875f', '#008787', '#0087af', '#0087d7', '#0087ff', '#00af00', '#00af5f', '#00af87', '#00afaf', '#00afd7', '#00afff', '#00d700', '#00d75f', '#00d787', '#00d7af', '#00d7d7', '#00d7ff', '#00ff00', '#00ff5f', '#00ff87', '#00ffaf', '#00ffd7', '#00ffff', '#5f0000', '#5f005f', '#5f0087', '#5f00af', '#5f00d7', '#5f00ff', '#5f5f00', '#5f5f5f', '#5f5f87', '#5f5faf', '#5f5fd7', '#5f5fff', '#5f8700', '#5f875f', '#5f8787', '#5f87af', '#5f87d7', '#5f87ff', '#5faf00', '#5faf5f', '#5faf87', '#5fafaf', '#5fafd7', '#5fafff', '#5fd700', '#5fd75f', '#5fd787', '#5fd7af', '#5fd7d7', '#5fd7ff', '#5fff00', '#5fff5f', '#5fff87', '#5fffaf', '#5fffd7', '#5fffff', '#870000', '#87005f', '#870087', '#8700af', '#8700d7', '#8700ff', '#875f00', '#875f5f', '#875f87', '#875faf', '#875fd7', '#875fff', '#878700', '#87875f', '#878787', '#8787af', '#8787d7', '#8787ff', '#87af00', '#87af5f', '#87af87', '#87afaf', '#87afd7', '#87afff', '#87d700', '#87d75f', '#87d787', '#87d7af', '#87d7d7', '#87d7ff', '#87ff00', '#87ff5f', '#87ff87', '#87ffaf', '#87ffd7', '#87ffff', '#af0000', '#af005f', '#af0087', '#af00af', '#af00d7', '#af00ff', '#af5f00', '#af5f5f', '#af5f87', '#af5faf', '#af5fd7', '#af5fff', '#af8700', '#af875f', '#af8787', '#af87af', '#af87d7', '#af87ff', '#afaf00', '#afaf5f', '#afaf87', '#afafaf', '#afafd7', '#afafff', '#afd700', '#afd75f', '#afd787', '#afd7af', '#afd7d7', '#afd7ff', '#afff00', '#afff5f', '#afff87', '#afffaf', '#afffd7', '#afffff', '#d70000', '#d7005f', '#d70087', '#d700af', '#d700d7', '#d700ff', '#d75f00', '#d75f5f', '#d75f87', '#d75faf', '#d75fd7', '#d75fff', '#d78700', '#d7875f', '#d78787', '#d787af', '#d787d7', '#d787ff', '#d7af00', '#d7af5f', '#d7af87', '#d7afaf', '#d7afd7', '#d7afff', '#d7d700', '#d7d75f', '#d7d787', '#d7d7af', '#d7d7d7', '#d7d7ff', '#d7ff00', '#d7ff5f', '#d7ff87', '#d7ffaf', '#d7ffd7', '#d7ffff', '#ff0000', '#ff005f', '#ff0087', '#ff00af', '#ff00d7', '#ff00ff', '#ff5f00', '#ff5f5f', '#ff5f87', '#ff5faf', '#ff5fd7', '#ff5fff', '#ff8700', '#ff875f', '#ff8787', '#ff87af', '#ff87d7', '#ff87ff', '#ffaf00', '#ffaf5f', '#ffaf87', '#ffafaf', '#ffafd7', '#ffafff', '#ffd700', '#ffd75f', '#ffd787', '#ffd7af', '#ffd7d7', '#ffd7ff', '#ffff00', '#ffff5f', '#ffff87', '#ffffaf', '#ffffd7', '#ffffff', '#080808', '#121212', '#1c1c1c', '#262626', '#303030', '#3a3a3a', '#444444', '#4e4e4e', '#585858', '#626262', '#6c6c6c', '#767676', '#808080', '#8a8a8a', '#949494', '#9e9e9e', '#a8a8a8', '#b2b2b2', '#bcbcbc', '#c6c6c6', '#d0d0d0', '#dadada', '#e4e4e4', '#eeeeee' ]
+if !exists('g:novum#xterm_colors')
+
+	let g:novum#xterm_colors = [ '#000000', '#c00000', '#008000', '#808000', '#000080', '#800080', '#008080', '#c0c0c0', '#808080', '#ff0000', '#00ff00', '#ffff00', '#0000ff', '#ff00ff', '#00ffff', '#ffffff', '#000000', '#00005f', '#000087', '#0000af', '#0000d7', '#0000ff', '#005f00', '#005f5f', '#005f87', '#005faf', '#005fd7', '#005fff', '#008700', '#00875f', '#008787', '#0087af', '#0087d7', '#0087ff', '#00af00', '#00af5f', '#00af87', '#00afaf', '#00afd7', '#00afff', '#00d700', '#00d75f', '#00d787', '#00d7af', '#00d7d7', '#00d7ff', '#00ff00', '#00ff5f', '#00ff87', '#00ffaf', '#00ffd7', '#00ffff', '#5f0000', '#5f005f', '#5f0087', '#5f00af', '#5f00d7', '#5f00ff', '#5f5f00', '#5f5f5f', '#5f5f87', '#5f5faf', '#5f5fd7', '#5f5fff', '#5f8700', '#5f875f', '#5f8787', '#5f87af', '#5f87d7', '#5f87ff', '#5faf00', '#5faf5f', '#5faf87', '#5fafaf', '#5fafd7', '#5fafff', '#5fd700', '#5fd75f', '#5fd787', '#5fd7af', '#5fd7d7', '#5fd7ff', '#5fff00', '#5fff5f', '#5fff87', '#5fffaf', '#5fffd7', '#5fffff', '#870000', '#87005f', '#870087', '#8700af', '#8700d7', '#8700ff', '#875f00', '#875f5f', '#875f87', '#875faf', '#875fd7', '#875fff', '#878700', '#87875f', '#878787', '#8787af', '#8787d7', '#8787ff', '#87af00', '#87af5f', '#87af87', '#87afaf', '#87afd7', '#87afff', '#87d700', '#87d75f', '#87d787', '#87d7af', '#87d7d7', '#87d7ff', '#87ff00', '#87ff5f', '#87ff87', '#87ffaf', '#87ffd7', '#87ffff', '#af0000', '#af005f', '#af0087', '#af00af', '#af00d7', '#af00ff', '#af5f00', '#af5f5f', '#af5f87', '#af5faf', '#af5fd7', '#af5fff', '#af8700', '#af875f', '#af8787', '#af87af', '#af87d7', '#af87ff', '#afaf00', '#afaf5f', '#afaf87', '#afafaf', '#afafd7', '#afafff', '#afd700', '#afd75f', '#afd787', '#afd7af', '#afd7d7', '#afd7ff', '#afff00', '#afff5f', '#afff87', '#afffaf', '#afffd7', '#afffff', '#d70000', '#d7005f', '#d70087', '#d700af', '#d700d7', '#d700ff', '#d75f00', '#d75f5f', '#d75f87', '#d75faf', '#d75fd7', '#d75fff', '#d78700', '#d7875f', '#d78787', '#d787af', '#d787d7', '#d787ff', '#d7af00', '#d7af5f', '#d7af87', '#d7afaf', '#d7afd7', '#d7afff', '#d7d700', '#d7d75f', '#d7d787', '#d7d7af', '#d7d7d7', '#d7d7ff', '#d7ff00', '#d7ff5f', '#d7ff87', '#d7ffaf', '#d7ffd7', '#d7ffff', '#ff0000', '#ff005f', '#ff0087', '#ff00af', '#ff00d7', '#ff00ff', '#ff5f00', '#ff5f5f', '#ff5f87', '#ff5faf', '#ff5fd7', '#ff5fff', '#ff8700', '#ff875f', '#ff8787', '#ff87af', '#ff87d7', '#ff87ff', '#ffaf00', '#ffaf5f', '#ffaf87', '#ffafaf', '#ffafd7', '#ffafff', '#ffd700', '#ffd75f', '#ffd787', '#ffd7af', '#ffd7d7', '#ffd7ff', '#ffff00', '#ffff5f', '#ffff87', '#ffffaf', '#ffffd7', '#ffffff', '#080808', '#121212', '#1c1c1c', '#262626', '#303030', '#3a3a3a', '#444444', '#4e4e4e', '#585858', '#626262', '#6c6c6c', '#767676', '#808080', '#8a8a8a', '#949494', '#9e9e9e', '#a8a8a8', '#b2b2b2', '#bcbcbc', '#c6c6c6', '#d0d0d0', '#dadada', '#e4e4e4', '#eeeeee' ]
+
+endif
 
 " :)
 
@@ -105,7 +139,7 @@ H DiffText            darkfg       NONE         NONE
 H EndOfBuffer         comment      NONE         NONE
 H ErrorMsg            red          NONE         NONE
 H VertSplit           comment      uibg         NONE
-H Folded              243          lightbg      NONE
+H Folded              brightfg     brightbg     NONE
 H FoldColumn          comment      NONE         NONE
 H SignColumn          comment      NONE         NONE
 H IncSearch           brightyellow bg           reverse
@@ -155,17 +189,17 @@ H Character           green        NONE         NONE
 H Number              blue         NONE         NONE
 H Boolean             blue         NONE         NONE
 H Float               blue         NONE         NONE
-H Identifier          NONE         NONE         NONE
+H Identifier          darkfg       NONE         NONE
 H Function            blue         NONE         NONE
 H Statement           darkfg       NONE         NONE
 H Conditional         darkfg       NONE         NONE
 H Repeat              darkfg       NONE         NONE
 H Label               darkfg       NONE         NONE
-H Operator            NONE         NONE         bold
-H Keyword             NONE         NONE         bold
+H Operator            darkfg       NONE         bold
+H Keyword             darkfg       NONE         bold
 H Exception           darkfg       NONE         NONE
-H PreProc             blue         NONE         NONE
-H Include             NONE         NONE         NONE
+H PreProc             darkfg       NONE         NONE
+H Include             darkfg       NONE         NONE
 H Define              blue         NONE         NONE
 H Macro               blue         NONE         NONE
 H PreCondit           blue         NONE         NONE
@@ -176,9 +210,9 @@ H Typedef             blue         NONE         NONE
 H Special             blue         NONE         NONE
 H SpecialChar         blue         NONE         NONE
 H Tag                 blue         NONE         NONE
-H Delimiter           NONE         NONE         NONE
+H Delimiter           darkfg       NONE         NONE
 H SpecialComment      blue         NONE         NONE
-H Debug               blue         NONE         NONE
+H Debug               orange       NONE         NONE
 H Underlined          NONE         NONE         underline
 H Ignore              comment      NONE         NONE
 H Error               red          NONE         NONE
@@ -238,7 +272,7 @@ H DiffFile            NONE         NONE         bold
 H DiffConstant        comment      NONE         NONE
 H DiffIndexLine       comment      NONE         NONE
 H DiffSubname         comment      NONE         NONE
-H DiffLine            comment      NONE         NONE
+H DiffLine            darkfg       NONE         NONE
 " ------------------- ------------ ------------ -------------------------------
 H helpHypertextJump   NONE         NONE         bold
 H helpCommand         NONE         NONE         bold
@@ -264,4 +298,4 @@ H manSectionHeading   blue         NONE         bold
 
 " :)
 
-" vim: cole=2 cocu=nci fdm=marker fmr=\(\:,\:\) fdl=0:
+" vim: cole=2 cocu=cv fdm=marker fmr=\(\:,\:\) fdl=0:
