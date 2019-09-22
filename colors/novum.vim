@@ -36,10 +36,10 @@ function! s:linkColor(name, link, inc, ...)
 endfunction
 
 " normal foreground
-call s:setColor('fg', 2, range(248, 254, 2))
+call s:setColor('fg', 0, [252])
 
 " normal background
-call s:setColor('bg', 2, range(232, 235))
+call s:setColor('bg', 0, [234])
 
 " light background
 call s:linkColor('lightbg', 'bg', 2)
@@ -60,7 +60,8 @@ call s:linkColor('select', 'bg', 8)
 let g:novum#colors.selectfg = 255
 
 " darker foreground
-call s:linkColor('darkfg', 'fg', -6)
+call s:linkColor('darkfg', 'fg', -8)
+" call s:setColor('darkfg', 0, [72])
 
 " UI foreground
 call s:linkColor('uifg', 'fg', 3)
@@ -76,29 +77,32 @@ call s:linkColor('uibgnc', 'uibg', -1)
 let g:novum#colors.uibgnc = 236
 
 " comment
-call s:setColor('comment', 2, range(g:novum#colors.bg + 3, g:novum#colors.darkfg - 2))
+" call s:linkColor('comment', 'bg', 6)
+call s:setColor('comment', 0, [66])
+call s:setColor('comment', 0, [72])
+call s:setColor('comment', 0, [59])
 
 " blue
-call s:setColor('blue', 2, [23, 30, 31, 37, 38, 45, 51])
-call s:setColor('lightblue', 0, [109])
+call s:setColor('blue', 0, [31])
+call s:setColor('lightblue', 0, [39])
 
 " green
-call s:setColor('green', 1, [29, 35, 78, 85])
+call s:setColor('green', 0, [35])
 call s:setColor('brightgreen', { n -> n ==# -1 ? 1 : n }(index([29, 35, 78, 85], g:novum#colors.green)), [35, 78, 85, 48])
 
 " red
 call s:setColor('red', 0, [203])
 
 " orange
-call s:setColor('orange', 0, [130])
+call s:setColor('orange', 0, [172])
 call s:setColor('brightorange', 0, [214])
 
 " yellow
-call s:setColor('yellow', 0, [136])
+call s:setColor('yellow', 0, [221])
 call s:setColor('brightyellow', 1, [226, 190])
 
 " purple
-call s:setColor('purple', 0, [102])
+call s:setColor('purple', 0, [175])
 
 " :)
 
@@ -135,7 +139,7 @@ H Directory           blue         NONE         NONE
 H DiffAdd             green        lightbg      bold
 H DiffChange          orange       NONE         bold
 H DiffDelete          red          NONE         NONE
-H DiffText            darkfg       NONE         NONE
+H DiffText            NONE         NONE         NONE
 H EndOfBuffer         comment      NONE         NONE
 H ErrorMsg            red          NONE         NONE
 H VertSplit           comment      uibg         NONE
@@ -157,7 +161,7 @@ H PmenuThumb          fg           uifgnc       NONE
 H Question            orange       NONE         NONE
 H QuickFixLine        NONE         NONE         underline
 H Search              brightyellow NONE         NONE
-H SpecialKey          darkfg       NONE         NONE
+H SpecialKey          NONE         NONE         NONE
 H SpellBad            red          NONE         NONE
 H SpellCap            yellow       NONE         NONE
 H SpellLocal          yellow       NONE         NONE
@@ -186,32 +190,32 @@ H Comment             comment      NONE         NONE
 H Constant            blue         NONE         NONE
 H String              green        NONE         NONE
 H Character           green        NONE         NONE
-H Number              blue         NONE         NONE
-H Boolean             blue         NONE         NONE
-H Float               blue         NONE         NONE
-H Identifier          darkfg       NONE         NONE
-H Function            blue         NONE         NONE
-H Statement           darkfg       NONE         NONE
-H Conditional         darkfg       NONE         NONE
-H Repeat              darkfg       NONE         NONE
-H Label               darkfg       NONE         NONE
-H Operator            darkfg       NONE         bold
-H Keyword             darkfg       NONE         bold
-H Exception           darkfg       NONE         NONE
-H PreProc             darkfg       NONE         NONE
-H Include             darkfg       NONE         NONE
-H Define              blue         NONE         NONE
-H Macro               blue         NONE         NONE
-H PreCondit           blue         NONE         NONE
+H Number              purple       NONE         NONE
+H Boolean             purple       NONE         NONE
+H Float               purple       NONE         NONE
+H Identifier          NONE         NONE         NONE
+H Function            NONE         NONE         NONE
+H Statement           blue         NONE         NONE
+H Conditional         blue         NONE         NONE
+H Repeat              blue         NONE         NONE
+H Label               blue         NONE         NONE
+H Operator            NONE         NONE         bold
+H Keyword             blue         NONE         bold
+H Exception           NONE         NONE         NONE
+H PreProc             NONE         NONE         NONE
+H Include             blue         NONE         NONE
+H Define              NONE         NONE         NONE
+H Macro               NONE         NONE         NONE
+H PreCondit           NONE         NONE         NONE
 H Type                blue         NONE         NONE
-H StorageClass        blue         NONE         NONE
-H Structure           blue         NONE         NONE
-H Typedef             blue         NONE         NONE
+H StorageClass        NONE         NONE         NONE
+H Structure           NONE         NONE         NONE
+H Typedef             NONE         NONE         NONE
 H Special             blue         NONE         NONE
 H SpecialChar         blue         NONE         NONE
-H Tag                 blue         NONE         NONE
-H Delimiter           darkfg       NONE         NONE
-H SpecialComment      blue         NONE         NONE
+H Tag                 NONE         NONE         NONE
+H Delimiter           NONE         NONE         NONE
+H SpecialComment      darkfg       NONE         NONE
 H Debug               orange       NONE         NONE
 H Underlined          NONE         NONE         underline
 H Ignore              comment      NONE         NONE
