@@ -8,7 +8,7 @@ set background=dark
 command! -bang -bar -nargs=? -complete=customlist,novum#color_set_compl Novum call novum#color_set(<bang>0, <f-args>)
 command! -bar -complete=highlight -nargs=+ H call s:hi(<f-args>)
 
-" colors (:
+" setup (:
 
 let s:t_string = get(v:, 't_string', type(''))
 
@@ -16,91 +16,17 @@ let g:novum#defaults = {}
 let g:novum#maxes = {}
 let g:novum#colors = {}
 
-" "set color default, max, color" (:
-"
-" PARAM: t_string "name" : name used for the defaults, maxes, colors dicts
-" PARAM: t_number "def"  : default value for lst; also, stored in defaults dict
-" PARAM: t_list   "lst"  : list of colors to choose from
-"
-function! s:setColor(name, def, lst)
+function! s:setColor(name, def, lst) " set color default, max, color (:
 	let g:novum#defaults[a:name] = a:def
 	let g:novum#maxes[a:name] = len(a:lst)
 	let g:novum#colors[a:name] = max([0, min([255, a:lst[ max([0, min([len(a:lst) - 1, str2nr(get(g:, 'novum_'.a:name, a:def))])]) ]])])
 endfunction " :)
 
-" "link previous color with increment"
-function! s:linkColor(name, link, inc, ...)
+function! s:linkColor(name, link, inc, ...) " link previous color with increment (:
 	let g:novum#defaults[a:name] = 0
 	let g:novum#maxes[a:name] = 1
 	let g:novum#colors[a:name] = max([0, get(a:000, 0, 0), min([255, get(a:000, 1, 255), g:novum#colors[a:link] + a:inc])])
-endfunction
-
-" normal foreground
-call s:setColor('fg', 2, range(248, 254, 2))
-
-" normal background
-call s:setColor('bg', 2, range(232, 235))
-
-" light background
-call s:linkColor('lightbg', 'bg', 2)
-
-" light foreground
-call s:linkColor('lightfg', 'lightbg', 10)
-
-" brighter background
-call s:linkColor('brightbg', 'bg', 3)
-
-" brighter foreground
-call s:linkColor('brightfg', 'brightbg', 10)
-
-" selection
-call s:linkColor('select', 'bg', 8)
-
-" selection fg
-let g:novum#colors.selectfg = 255
-
-" darker foreground
-call s:linkColor('darkfg', 'fg', -6)
-
-" UI foreground
-call s:linkColor('uifg', 'fg', 3)
-
-" UI background
-call s:linkColor('uibg', 'bg', 3)
-
-" UI foreground NC
-call s:setColor('uifgnc', 0, [243])
-
-" UI background NC
-call s:linkColor('uibgnc', 'uibg', -1)
-let g:novum#colors.uibgnc = 236
-
-" comment
-call s:setColor('comment', 2, range(g:novum#colors.bg + 3, g:novum#colors.darkfg - 2))
-
-" blue
-call s:setColor('blue', 2, [23, 30, 31, 37, 38, 45, 51])
-call s:setColor('lightblue', 0, [109])
-
-" green
-call s:setColor('green', 1, [29, 35, 78, 85])
-call s:setColor('brightgreen', { n -> n ==# -1 ? 1 : n }(index([29, 35, 78, 85], g:novum#colors.green)), [35, 78, 85, 48])
-
-" red
-call s:setColor('red', 0, [203])
-
-" orange
-call s:setColor('orange', 0, [130])
-call s:setColor('brightorange', 0, [214])
-
-" yellow
-call s:setColor('yellow', 0, [136])
-call s:setColor('brightyellow', 1, [226, 190])
-
-" purple
-call s:setColor('purple', 0, [102])
-
-" :)
+endfunction " :)
 
 function! s:hi(grp, fg, bg, attr) " (:
 	let l:fg = a:fg =~? '^\%(\d\+\|none\)$' ? a:fg : g:novum#colors[a:fg]
@@ -108,6 +34,7 @@ function! s:hi(grp, fg, bg, attr) " (:
 	exec printf('hi! %s ctermfg=%s ctermbg=%s cterm=%s', a:grp, l:fg, l:bg, a:attr)
 	exec printf('hi! %s guifg=%s guibg=%s gui=%s', a:grp, l:fg =~# '^\d\+$' ? g:novum#xterm_colors[l:fg] : l:fg, l:bg =~# '^\d\+$' ? g:novum#xterm_colors[l:bg] : l:bg, a:attr)
 endfunction " :)
+
 
 " 256 xterm color palette (:
 
@@ -119,182 +46,276 @@ endif
 
 " :)
 
+" :)
+
+" colors (:
+
+" normal foreground
+call s:setColor('fg', 3, range(248, 254, 2))
+
+" normal background
+call s:setColor('bg', 2, range(232, 242))
+" call s:setColor('bg', 0, [234])
+
+" light background
+call s:linkColor('lightbg', 'bg', 2)
+
+" dark foreground
+call s:linkColor('darkfg', 'lightbg', 10)
+
+" brighter background
+call s:linkColor('brightbg', 'bg', 2)
+
+" darker foreground
+call s:linkColor('darkerfg', 'brightbg', 10)
+
+" selection
+call s:linkColor('select', 'bg', 8)
+
+" selection fg
+call s:setColor('selectfg', 0, [255])
+
+" darker foreground
+call s:linkColor('darkfg', 'fg', -4)
+
+" UI background
+call s:linkColor('uibg', 'bg', 5)
+
+" UI foreground
+call s:linkColor('uifg', 'uibg', 10)
+
+" UI background NC
+call s:linkColor('uibgnc', 'uibg', -2)
+
+" UI foreground NC
+call s:linkColor('uifgnc', 'uibgnc', 10)
+
+" comment
+call s:setColor('comment', 4, range(g:novum#colors.bg + 3, g:novum#colors.fg - 4))
+
+" dark blue
+call s:setColor('darkblue', 0, [25, 31, 38])
+
+" blue
+call s:setColor('blue', 1, [31, 38, 45])
+
+" light blue
+call s:setColor('lightblue', 0, [45])
+
+" dark green
+call s:setColor('darkgreen', 0, [29])
+
+" green
+call s:setColor('green', 1, [29, 36, 42])
+
+" light green
+call s:setColor('lightgreen', 0, [42])
+
+" red
+call s:setColor('red', 0, [203])
+
+" dark orange
+call s:setColor('darkorange', 1, [130, 166])
+
+" orange
+call s:setColor('orange', 0, [209])
+
+" light orange
+call s:setColor('lightorange', 0, [216])
+
+" dark yellow
+call s:setColor('darkyellow', 1, [94, 136, 179])
+
+" yellow
+call s:setColor('yellow', 1, [136, 179, 222])
+
+" light yellow
+call s:setColor('lightyellow', 1, [179, 222, 228])
+
+" purple
+call s:setColor('purple', 0, [176])
+
+" :)
+
 " Default: |highlight-groups| (:
 " ~~~~~~~
 
-" Group               FG           BG           STYLE
-" ------------------- ------------ ------------ -------------------------------
-H ColorColumn         NONE         lightbg      NONE
-H Conceal             comment      NONE         NONE
-H Cursor              bg           fg           NONE
-H lCursor             bg           fg           NONE
-H CursorIM            bg           fg           NONE
-H CursorColumn        NONE         lightbg      NONE
-H CursorLine          NONE         lightbg      NONE
-H Directory           blue         NONE         NONE
-H DiffAdd             green        lightbg      bold
-H DiffChange          orange       NONE         bold
-H DiffDelete          red          NONE         NONE
-H DiffText            darkfg       NONE         NONE
-H EndOfBuffer         comment      NONE         NONE
-H ErrorMsg            red          NONE         NONE
-H VertSplit           comment      uibg         NONE
-H Folded              brightfg     brightbg     NONE
-H FoldColumn          comment      NONE         NONE
-H SignColumn          comment      NONE         NONE
-H IncSearch           brightyellow bg           reverse
-H LineNr              comment      NONE         NONE
-H CursorLineNr        green        NONE         NONE
-H MatchParen          NONE         NONE         underline
-H ModeMsg             orange       NONE         NONE
-H MoreMsg             orange       NONE         NONE
-H NonText             comment      NONE         NONE
-H Normal              fg           bg           NONE
-H Pmenu               fg           uibg         NONE
-H PmenuSel            bg           fg           NONE
-H PmenuSbar           fg           lightbg      NONE
-H PmenuThumb          fg           uifgnc       NONE
-H Question            orange       NONE         NONE
-H QuickFixLine        NONE         NONE         underline
-H Search              brightyellow NONE         NONE
-H SpecialKey          darkfg       NONE         NONE
-H SpellBad            red          NONE         NONE
-H SpellCap            yellow       NONE         NONE
-H SpellLocal          yellow       NONE         NONE
-H SpellRare           yellow       NONE         NONE
-H StatusLine          uifg         uibg         NONE
-H StatusLineNC        uifgnc       uibgnc       NONE
-H StatusLineTerm      uifg         uibg         NONE
-H StatusLineTermNC    uifgnc       uibgnc       NONE
-H TabLine             uifgnc       uibg         NONE
-H TabLineFill         uifgnc       uibg         NONE
-H TabLineSel          brightgreen  uibg         NONE
-H Terminal            NONE         bg           NONE
-H Title               NONE         NONE         bold
-H Visual              selectfg     select       NONE
-H VisualNOS           selectfg     select       NONE
-H WarningMsg          yellow       NONE         bold
-H WildMenu            NONE         lightbg      bold
+" Group                 FG           BG           STYLE
+" --------------------- ------------ ------------ -------------------------------
+H ColorColumn           NONE         lightbg      NONE
+H Conceal               comment      NONE         NONE
+H Cursor                bg           fg           NONE
+H lCursor               bg           fg           NONE
+H CursorIM              bg           fg           NONE
+H CursorColumn          NONE         lightbg      NONE
+H CursorLine            NONE         lightbg      NONE
+H Directory             blue         NONE         NONE
+H DiffAdd               green        lightbg      bold
+H DiffChange            orange       NONE         bold
+H DiffDelete            red          NONE         NONE
+H DiffText              darkfg       NONE         NONE
+H EndOfBuffer           comment      NONE         NONE
+H ErrorMsg              red          NONE         NONE
+H VertSplit             comment      uibg         NONE
+H Folded                darkerfg     brightbg     NONE
+H FoldColumn            comment      NONE         NONE
+H SignColumn            comment      NONE         NONE
+H IncSearch             lightyellow  bg           reverse
+H LineNr                darkerfg     NONE         NONE
+H CursorLineNr          green        NONE         NONE
+H MatchParen            NONE         NONE         underline
+H ModeMsg               orange       NONE         NONE
+H MoreMsg               orange       NONE         NONE
+H NonText               comment      NONE         NONE
+H Normal                fg           bg           NONE
+H Pmenu                 fg           uibg         NONE
+H PmenuSel              bg           fg           NONE
+H PmenuSbar             fg           lightbg      NONE
+H PmenuThumb            fg           uifgnc       NONE
+H Question              orange       NONE         NONE
+H QuickFixLine          NONE         NONE         underline
+H Search                lightyellow  NONE         NONE
+H SpecialKey            darkfg       NONE         NONE
+H SpellBad              red          NONE         NONE
+H SpellCap              yellow       NONE         NONE
+H SpellLocal            yellow       NONE         NONE
+H SpellRare             yellow       NONE         NONE
+H StatusLine            uifg         uibg         NONE
+H StatusLineNC          uifgnc       uibgnc       NONE
+H StatusLineTerm        uifg         uibg         NONE
+H StatusLineTermNC      uifgnc       uibgnc       NONE
+H TabLine               uifgnc       uibg         NONE
+H TabLineFill           uifgnc       uibg         NONE
+H TabLineSel            lightgreen   uibg         NONE
+H Terminal              NONE         bg           NONE
+H Title                 NONE         NONE         bold
+H Visual                selectfg     select       NONE
+H VisualNOS             selectfg     select       NONE
+H WarningMsg            yellow       NONE         bold
+H WildMenu              green        uibg         bold
 
 " :)
 " Syntax: |group-name| (:
 " ~~~~~~
 
-" Group               FG           BG           STYLE
-" ------------------- ------------ ------------ -------------------------------
-H Comment             comment      NONE         NONE
-H Constant            blue         NONE         NONE
-H String              green        NONE         NONE
-H Character           green        NONE         NONE
-H Number              blue         NONE         NONE
-H Boolean             blue         NONE         NONE
-H Float               blue         NONE         NONE
-H Identifier          darkfg       NONE         NONE
-H Function            blue         NONE         NONE
-H Statement           darkfg       NONE         NONE
-H Conditional         darkfg       NONE         NONE
-H Repeat              darkfg       NONE         NONE
-H Label               darkfg       NONE         NONE
-H Operator            darkfg       NONE         bold
-H Keyword             darkfg       NONE         bold
-H Exception           darkfg       NONE         NONE
-H PreProc             darkfg       NONE         NONE
-H Include             darkfg       NONE         NONE
-H Define              blue         NONE         NONE
-H Macro               blue         NONE         NONE
-H PreCondit           blue         NONE         NONE
-H Type                blue         NONE         NONE
-H StorageClass        blue         NONE         NONE
-H Structure           blue         NONE         NONE
-H Typedef             blue         NONE         NONE
-H Special             blue         NONE         NONE
-H SpecialChar         blue         NONE         NONE
-H Tag                 blue         NONE         NONE
-H Delimiter           darkfg       NONE         NONE
-H SpecialComment      blue         NONE         NONE
-H Debug               orange       NONE         NONE
-H Underlined          NONE         NONE         underline
-H Ignore              comment      NONE         NONE
-H Error               red          NONE         NONE
-H Todo                fg           NONE         underline
+" Group                 FG           BG           STYLE
+" --------------------- ------------ ------------ -------------------------------
+H Comment               comment      NONE         NONE
+H Constant              blue         NONE         NONE
+H String                green        NONE         NONE
+H Character             green        NONE         NONE
+H Number                purple       NONE         NONE
+H Boolean               purple       NONE         NONE
+H Float                 purple       NONE         NONE
+H Identifier            NONE         NONE         NONE
+H Function              NONE         NONE         NONE
+H Statement             blue         NONE         NONE
+H Conditional           blue         NONE         NONE
+H Repeat                blue         NONE         NONE
+H Label                 blue         NONE         NONE
+H Operator              darkfg       NONE         NONE
+H Keyword               darkfg       NONE         NONE
+H Exception             blue         NONE         NONE
+H PreProc               blue         NONE         NONE
+H Include               blue         NONE         NONE
+H Define                blue         NONE         NONE
+H Macro                 blue         NONE         NONE
+H PreCondit             blue         NONE         NONE
+H Type                  blue         NONE         NONE
+H StorageClass          blue         NONE         NONE
+H Structure             blue         NONE         NONE
+H Typedef               blue         NONE         NONE
+H Special               blue         NONE         NONE
+H SpecialChar           blue         NONE         NONE
+H Tag                   blue         NONE         NONE
+H Delimiter             darkfg       NONE         NONE
+H SpecialComment        blue         NONE         NONE
+H Debug                 orange       NONE         NONE
+H Underlined            NONE         NONE         underline
+H Ignore                comment      NONE         NONE
+H Error                 red          NONE         NONE
+H Todo                  fg           NONE         underline
 
 " :)
 " User: |hl-User1..9| (:
 " ~~~~
 
-" Group               FG           BG           STYLE
-" ------------------- ------------ ------------ -------------------------------
-H User1               red          uibg         NONE
-H User2               brightgreen  uibg         NONE
-H User3               yellow       uibg         NONE
-H User4               blue         uibg         NONE
-H User5               purple       uibg         NONE
-H User6               blue         uibg         NONE
-H User7               fg           uibg         NONE
-H User8               uifgnc       uibg         NONE
-H User9               247          uibg         NONE
+" Group                 FG           BG           STYLE
+" --------------------- ------------ ------------ -------------------------------
+H User1                 red          uibg         NONE
+H User2                 lightgreen   uibg         NONE
+H User3                 yellow       uibg         NONE
+H User4                 blue         uibg         NONE
+H User5                 purple       uibg         NONE
+H User6                 blue         uibg         NONE
+H User7                 fg           uibg         NONE
+H User8                 uifgnc       uibg         NONE
+H User9                 247          uibg         NONE
 
 " :)
 " Extra: (:
 " ~~~~~
 
-" Group               FG           BG           STYLE
-" ------------------- ------------ ------------ -------------------------------
-H htmltagname         blue         NONE         NONE
-H htmlspecialtagname  blue         NONE         NONE
-H htmltag             NONE         NONE         NONE
-H htmlendtag          NONE         NONE         NONE
-H htmlarg             NONE         NONE         NONE
-H htmlstring          green        NONE         NONE
-H htmlvalue           green        NONE         NONE
-H htmcomment          comment      NONE         NONE
-H htmlcommentpart     comment      NONE         NONE
-" ------------------- ------------ ------------ -------------------------------
-H cssProp             darkfg       NONE         NONE
-H cssDefinition       darkfg       NONE         NONE
-H cssBackgroundProp   darkfg       NONE         NONE
-H cssMediaProp        darkfg       NONE         NONE
-H cssPositioningProp  darkfg       NONE         NONE
-H cssSelectorOp       darkfg       NONE         NONE
-" ------------------- ------------ ------------ -------------------------------
-H DiffOnly            comment      NONE         NONE
-H DiffIdentical       comment      NONE         NONE
-H DiffDiffer          comment      NONE         NONE
-H DiffBdiffer         comment      NONE         NONE
-H DiffIsa             comment      NONE         NONE
-H DiffNoeol           comment      NONE         NONE
-H DiffCommon          comment      NONE         NONE
-H DiffComment         comment      NONE         NONE
-H DiffRemoved         red          NONE         NONE
-H DiffChanged         NONE         NONE         bold
-H DiffAdded           NONE         NONE         bold
-H DiffFile            NONE         NONE         bold
-H DiffConstant        comment      NONE         NONE
-H DiffIndexLine       comment      NONE         NONE
-H DiffSubname         comment      NONE         NONE
-H DiffLine            darkfg       NONE         NONE
-" ------------------- ------------ ------------ -------------------------------
-H helpHypertextJump   NONE         NONE         bold
-H helpCommand         NONE         NONE         bold
-H helpOption          NONE         NONE         bold
-H helpHyperTextEntry  darkfg       NONE         NONE
-H helpHyperTextJump   darkfg       NONE         NONE
-H helpExample         darkfg       NONE         NONE
-H helpVim             uifg         NONE         bold
-" ------------------- ------------ ------------ -------------------------------
-H vimHiGroup          green        NONE         NONE
-H vimHiGuiFgBg        darkfg       NONE         NONE
-H vimHiCtermFgBg      darkfg       NONE         NONE
-H vimHiCTerm          darkfg       NONE         NONE
-H vimHiGui            darkfg       NONE         NONE
-H vimFuncVar          darkfg       NONE         NONE
-H vimCommentTitle     fg           NONE         bold
-H vimFunction         blue         NONE         NONE
-" ------------------- ------------ ------------ -------------------------------
-H MatchWordCur        NONE         NONE         underline
-H MatchWord           NONE         NONE         underline
-" ------------------- ------------ ------------ -------------------------------
-H manSectionHeading   blue         NONE         bold
+" Group                 FG           BG           STYLE
+" --------------------- ------------ ------------ -------------------------------
+H htmltagname           blue         NONE         NONE
+H htmlspecialtagname    blue         NONE         NONE
+H htmltag               NONE         NONE         NONE
+H htmlendtag            NONE         NONE         NONE
+H htmlarg               NONE         NONE         NONE
+H htmlstring            green        NONE         NONE
+H htmlvalue             green        NONE         NONE
+H htmcomment            comment      NONE         NONE
+H htmlcommentpart       comment      NONE         NONE
+" --------------------- ------------ ------------ -------------------------------
+H cssProp               darkfg       NONE         NONE
+H cssDefinition         darkfg       NONE         NONE
+H cssBackgroundProp     darkfg       NONE         NONE
+H cssMediaProp          darkfg       NONE         NONE
+H cssPositioningProp    darkfg       NONE         NONE
+H cssSelectorOp         darkfg       NONE         NONE
+" --------------------- ------------ ------------ -------------------------------
+H DiffOnly              comment      NONE         NONE
+H DiffIdentical         comment      NONE         NONE
+H DiffDiffer            comment      NONE         NONE
+H DiffBdiffer           comment      NONE         NONE
+H DiffIsa               comment      NONE         NONE
+H DiffNoeol             comment      NONE         NONE
+H DiffCommon            comment      NONE         NONE
+H DiffComment           comment      NONE         NONE
+H DiffRemoved           red          NONE         NONE
+H DiffChanged           NONE         NONE         bold
+H DiffAdded             NONE         NONE         bold
+H DiffFile              NONE         NONE         bold
+H DiffConstant          comment      NONE         NONE
+H DiffIndexLine         comment      NONE         NONE
+H DiffSubname           comment      NONE         NONE
+H DiffLine              darkfg       NONE         NONE
+" --------------------- ------------ ------------ -------------------------------
+H helpHypertextJump     NONE         NONE         bold
+H helpCommand           NONE         NONE         bold
+H helpOption            NONE         NONE         bold
+H helpHyperTextEntry    darkfg       NONE         NONE
+H helpHyperTextJump     darkfg       NONE         NONE
+H helpExample           darkfg       NONE         NONE
+H helpVim               uifg         NONE         bold
+" --------------------- ------------ ------------ -------------------------------
+H vimHiGuiFgBg          darkfg       NONE         NONE
+H vimHiCtermFgBg        darkfg       NONE         NONE
+H vimHiCTerm            darkfg       NONE         NONE
+H vimHiGui              darkfg       NONE         NONE
+H vimFuncVar            darkfg       NONE         NONE
+H vimCommentTitle       orange       NONE         bold
+H vimOption             fg           NONE         NONE
+H vimEchoHLNone         NONE         NONE         NONE
+" --------------------- ------------ ------------ -------------------------------
+H MatchWordCur          NONE         NONE         underline
+H MatchWord             NONE         NONE         underline
+" --------------------- ------------ ------------ -------------------------------
+H manSectionHeading     blue         NONE         bold
+" --------------------- ------------ ------------ -------------------------------
+H markdownCodeDelimiter bg           darkgreen    NONE
+H markdownCode          green        NONE         NONE
 
 " :)
 
