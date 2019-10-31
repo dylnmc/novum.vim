@@ -95,7 +95,7 @@ function! novum#color_set_compl(arglead, cmdline, curpos) abort " (:
 endfunction " :)
 
 function! novum#setup_colors(init) " (:
-	if expand('%:p') !~# '\/colors\/novum\.vim$' || get(b:, 'novum_no_setup')
+	if expand('%:p') !~# '\/colors\/novum\.vim$' || g:colors_name !=# 'novum' || get(b:, 'novum_no_setup')
 		return
 	endif
 	nnoremap <buffer> <silent> ) <c-a>:update<cr>
@@ -123,7 +123,9 @@ function! novum#setup_colors(init) " (:
 			if l:name ==# 'bg'
 				exec printf('hi %s guibg=%s ctermbg=%d', l:group, g:novum#xterm_colors[g:novum#colors.fg], g:novum#colors.fg)
 			endif
-			call matchaddpos(l:group, [[l:linenr - 1, 3, strlen(getline(l:linenr - 1)) - 2]])
+			let l:p1 = stridx(l:line, "'")
+			let l:p2 = stridx(l:line, "'", l:p1 + 1)
+			call matchaddpos(l:group, [[l:linenr, l:p1 + 1, l:p2 - l:p1 + 1]])
 		endif
 	endfor
 	" if 
