@@ -50,44 +50,44 @@ endif
 call s:setColor('fg'          , 0, [251])
 call s:setColor('bg'          , 0, [235])
 call s:setColor('faintbg'     , 0, [236])
-call s:setColor('lightbg'     , 0, [237])
-call s:setColor('lighterbg'   , 0, [241])
-call s:setColor('uibg'        , 0, [238])
-call s:setColor('uifg'        , 0, [253])
-call s:setColor('uibgnc'      , 0, [237])
-call s:setColor('uifgnc'      , 0, [252])
+call s:setColor('lightbg'     , 0, [238])
+call s:setColor('lighterbg'   , 0, [240])
+call s:setColor('uibg'        , 0, [241])
+call s:setColor('uibgnc'      , 0, [239])
+call s:setColor('uifg'        , 0, [255])
+call s:setColor('uifgnc'      , 0, [248])
 call s:setColor('comment'     , 0, [243, 137, 174, 173, 137, 101])
 call s:setColor('darkfg'      , 0, [247])
 call s:setColor('darkerfg'    , 0, [240])
+call s:setColor('mutedblue'   , 0, [67])
 call s:setColor('darkblue'    , 1, [25, 31, 74])
 call s:setColor('blue'        , 1, [31, 74, 81])
 call s:setColor('lightblue'   , 1, [74, 81, 87])
+call s:setColor('mutedgreen'  , 0, [108])
 call s:setColor('darkgreen'   , 1, [22, 29, 36])
 call s:setColor('green'       , 1, [29, 36, 42])
 call s:setColor('lightgreen'  , 1, [36, 42, 48])
-call s:setColor('darkcyan'    , 1, [23, 30, 37])
-call s:setColor('cyan'        , 1, [30, 37, 44])
-call s:setColor('lightcyan'   , 1, [37, 44, 80])
-call s:setColor('darkred'     , 1, [131, 167, 203])
-call s:setColor('red'         , 1, [167, 203, 211])
-call s:setColor('lightred'    , 1, [167, 203, 211])
-call s:setColor('darkpink'    , 1, [133, 169])
-call s:setColor('pink'        , 1, [169, 205])
-call s:setColor('lightpink'   , 1, [205, 219])
+call s:setColor('mutedcyan'   , 0, [66])
+call s:setColor('darkcyan'    , 1, [23, 30, 73])
+call s:setColor('cyan'        , 1, [30, 73, 44])
+call s:setColor('lightcyan'   , 1, [73, 80, 116])
+call s:setColor('darkred'     , 0, [131, 167])
+call s:setColor('red'         , 0, [167, 203])
+call s:setColor('lightred'    , 0, [203, 211])
+call s:setColor('darkpink'    , 0, [133, 169])
+call s:setColor('pink'        , 0, [169, 205])
+call s:setColor('lightpink'   , 0, [205, 219])
+call s:setColor('mutedorange' , 0, [174])
 call s:setColor('darkorange'  , 0, [166])
 call s:setColor('orange'      , 0, [209])
 call s:setColor('lightorange' , 0, [216])
+call s:setColor('mutedyellow' , 0, [180])
 call s:setColor('darkyellow'  , 1, [94, 136, 179])
 call s:setColor('yellow'      , 1, [136, 179, 222])
 call s:setColor('lightyellow' , 1, [179, 222, 228])
+call s:setColor('mutedpurple' , 0, [182])
 call s:setColor('purple'      , 0, [176])
 call s:setColor('darkpurple'  , 0, [96])
-call s:setColor('mutedblue'   , 0, [67])
-call s:setColor('mutedgreen'  , 0, [65])
-call s:setColor('mutedcyan'   , 0, [66])
-call s:setColor('mutedorange' , 0, [174])
-call s:setColor('mutedyellow' , 0, [180])
-call s:setColor('mutedpink'   , 0, [182])
 
 " :)
 
@@ -96,7 +96,7 @@ call s:setColor('mutedpink'   , 0, [182])
 
 " Group                 FG           BG           STYLE
 " --------------------- ------------ ------------ -------------------------------
-H ColorColumn           NONE         lightbg      NONE
+H ColorColumn           NONE         faintbg      NONE
 H Conceal               darkerfg     NONE         NONE
 H Cursor                bg           fg           NONE
 H lCursor               bg           fg           NONE
@@ -111,13 +111,13 @@ H DiffText              bg           darkorange   NONE
 H EndOfBuffer           comment      NONE         NONE
 H ErrorMsg              red          NONE         NONE
 H VertSplit             comment      uibg         NONE
-H Folded                darkfg       lightbg      NONE
+H Folded                mutedcyan    faintbg      NONE
 H FoldColumn            comment      NONE         NONE
 H SignColumn            comment      NONE         NONE
 H IncSearch             bg           yellow       NONE
 H LineNr                mutedcyan    NONE         NONE
 H CursorLineNr          green        NONE         NONE
-H MatchParen            NONE         NONE         underline
+H MatchParen            bg           mutedcyan    NONE
 H ModeMsg               orange       NONE         NONE
 H MoreMsg               orange       NONE         NONE
 H NonText               comment      NONE         NONE
@@ -127,26 +127,26 @@ H PmenuSel              uibg         uifg         NONE
 H PmenuSbar             fg           lightbg      NONE
 H PmenuThumb            bg           darkgreen    NONE
 H Question              orange       NONE         NONE
-H QuickFixLine          NONE         lightbg      NONE
+H QuickFixLine          NONE         faintbg      bold,underline
 H Search                lightyellow  NONE         underline
 H SpecialKey            darkerfg     NONE         NONE
 H SpellBad              red          NONE         NONE
 H SpellCap              yellow       NONE         NONE
 H SpellLocal            yellow       NONE         NONE
 H SpellRare             yellow       NONE         NONE
-H StatusLine            uifg         uibg         NONE
-H StatusLineNC          uifgnc       uibgnc       NONE
-H StatusLineTerm        uifg         uibg         NONE
-H StatusLineTermNC      uifgnc       uibgnc       NONE
-H TabLine               uifgnc       uibgnc       NONE
-H TabLineFill           uifgnc       uibgnc       NONE
-H TabLineSel            lightgreen   uibg         NONE
+H StatusLine            uifg         uibg         bold
+H StatusLineNC          fg           uibgnc       NONE
+H StatusLineTerm        lightcyan    uibg         NONE
+H StatusLineTermNC      cyan         uibgnc       NONE
+H TabLine               cyan         uibgnc       NONE
+H TabLineFill           cyan         uibgnc       NONE
+H TabLineSel            lightcyan    uibg         NONE
 H Terminal              NONE         bg           NONE
 H Title                 NONE         NONE         bold
-H Visual                NONE         lightbg      NONE
-H VisualNOS             NONE         lightbg      NONE
+H Visual                NONE         lightbg      bold
+H VisualNOS             NONE         lightbg      bold
 H WarningMsg            yellow       NONE         NONE
-H WildMenu              lightbg      green        NONE
+H WildMenu              bg           green        NONE
 
 " :)
 " Syntax: |group-name| (:
@@ -240,16 +240,16 @@ H DiffComment           comment      NONE         NONE
 H DiffRemoved           red          NONE         NONE
 H DiffChanged           yellow       NONE         NONE
 H DiffAdded             green        NONE         NONE
-H DiffFile              darkfg       NONE         NONE
+H DiffFile              blue         NONE         NONE
 H DiffNewFile           darkfg       NONE         NONE
 H DiffConstant          mutedcyan    NONE         NONE
 H DiffIndexLine         yellow       NONE         NONE
 H DiffSubname           mutedcyan    NONE         NONE
-H DiffLine              darkfg       NONE         NONE
-H gitcommitSummary      mutedorange  NONE         NONE
+H DiffLine              blue         NONE         NONE
+H gitcommitSummary      mutedorange  NONE         underline
 " --------------------- ------------ ------------ -------------------------------
 H helpCommand           mutedcyan    NONE         NONE
-H helpOption            mutedcyan    NONE         NONE
+H helpOption            mutedyellow  NONE         NONE
 H helpHyperTextEntry    blue         NONE         bold
 H helpHyperTextJump     blue         NONE         underline
 H helpSectionDelim      darkerfg     NONE         NONE
@@ -262,24 +262,26 @@ H vimHiCtermFgBg        darkfg       NONE         NONE
 H vimHiCTerm            darkfg       NONE         NONE
 H vimHiGui              darkfg       NONE         NONE
 H vimFuncVar            darkfg       NONE         NONE
-H vimCommentTitle       darkfg       NONE         bold
+H vimHlGroup            mutedblue    NONE         NONE
+H vimEchoHLNone         mutedblue    NONE         NONE
+H vimEnvVar             darkfg       NONE         NONE
+H vimCommentTitle       mutedgreen   NONE         bold
 H vimOption             fg           NONE         NONE
-H vimEchoHLNone         darkfg       NONE         NONE
 H vimVar                fg           NONE         NONE
 H vimFTOption           fg           NONE         NONE
 H vimSynType            fg           NONE         NONE
 H vimAutoEvent          fg           NONE         NONE
 H vimCommand            blue         NONE         NONE
+H vimSet                NONE         NONE         NONE
 H vimLet                blue         NONE         NONE
-H vimSet                blue         NONE         NONE
 H vimCmplxRepeat        blue         NONE         NONE
 H vimFuncSID            blue         NONE         NONE
-H vimBracket            darkfg       NONE         NONE
-H vimNotation           darkfg       NONE         NONE
-H vimMapMod             darkfg       NONE         NONE
-H vimMapModKey          darkfg       NONE         NONE
-H vimUserAttrbKey       darkfg       NONE         NONE
-H vimContinue           darkfg       NONE         NONE
+H vimBracket            mutedyellow  NONE         NONE
+H vimNotation           mutedyellow  NONE         NONE
+H vimMapMod             mutedyellow  NONE         NONE
+H vimMapModKey          mutedyellow  NONE         NONE
+H vimUserAttrbKey       mutedyellow  NONE         NONE
+H vimContinue           mutedcyan    NONE         NONE
 " --------------------- ------------ ------------ -------------------------------
 H MatchWordCur          NONE         NONE         underline
 H MatchWord             NONE         NONE         underline
@@ -292,6 +294,15 @@ H manOptionDesc         mutedyellow  NONE         NONE
 " --------------------- ------------ ------------ -------------------------------
 H markdownCodeDelimiter bg           darkgreen    NONE
 H markdownCode          green        NONE         NONE
+H markdownListMarker    mutedcyan    NONE         NONE
+H markdownUrl           blue         NONE         underline
+H markdownH1            mutedyellow  NONE         NONE
+H markdownH2            mutedyellow  NONE         NONE
+H markdownH3            mutedyellow  NONE         NONE
+H markdownH4            mutedyellow  NONE         NONE
+H markdownH5            mutedyellow  NONE         NONE
+H markdownH6            mutedyellow  NONE         NONE
+H markdownHeadingDelimiter mutedyellow NONE         NONE
 
 " :)
 
